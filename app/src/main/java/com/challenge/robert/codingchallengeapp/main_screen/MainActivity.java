@@ -6,6 +6,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Toast;
 
 import com.challenge.robert.codingchallengeapp.R;
 import com.challenge.robert.codingchallengeapp.main_screen.adapter.UsersAdapter;
@@ -56,6 +57,11 @@ public class MainActivity extends MvpActivity<MainActivityView, MainActivityPres
     public void onAddUserSuccess(User user) {
         userInputDialog.dismiss();
         usersAdapter.addUserAndNotify(user);
+    }
+
+    @Override
+    public void onUserAlreadyAdded() {
+        Toast.makeText(this,R.string.user_already_added,Toast.LENGTH_LONG).show();
     }
 
     @Override

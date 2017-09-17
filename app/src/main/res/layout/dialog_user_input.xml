@@ -8,6 +8,7 @@
         android:id="@+id/dialog_user_first_name_et"
         style="@style/NameInputEditText"
         android:layout_width="match_parent"
+        android:layout_marginTop="32dp"
         android:hint="@string/first_name"
         android:imeOptions="actionNext" />
 

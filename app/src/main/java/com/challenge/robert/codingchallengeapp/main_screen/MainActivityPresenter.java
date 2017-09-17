@@ -36,10 +36,24 @@ public class MainActivityPresenter extends MvpPresenter<MainActivityView> {
         });
     }
 
-    void addUser(String firstName,String lastName) {
-        if (firstName.isEmpty() || lastName.isEmpty()) return;
+    void addUser(String firstName, String lastName) {
+        // check for empty name
+        if (firstName.isEmpty() || lastName.isEmpty()) {
+            return;
+        }
 
-        final User user = getFormattedUser(firstName,lastName);
+        // check for unique name
+        if (contains(firstName, lastName)) {
+            post(new MvpViewConsumer<MainActivityView>() {
+                @Override
+                public void postToView(MainActivityView mvpView) {
+                    mvpView.onUserAlreadyAdded();
+                }
+            });
+            return;
+        }
+
+        final User user = getFormattedUser(firstName, lastName);
 
         userInfoList.add(user);
 
@@ -51,6 +65,16 @@ public class MainActivityPresenter extends MvpPresenter<MainActivityView> {
         });
     }
 
+    private boolean contains(String firstName, String lastName) {
+        for (User user :
+                userInfoList) {
+            if (user.getFirstName().equalsIgnoreCase(firstName) && user.getLastName().equalsIgnoreCase(lastName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private void parseUsersJson(String json) {
         try {
             JSONArray jsonArray = new JSONArray(json);
@@ -58,7 +82,7 @@ public class MainActivityPresenter extends MvpPresenter<MainActivityView> {
                 JSONObject jsonObject = (JSONObject) jsonArray.get(i);
                 String firstName = jsonObject.getString(User.JSON_KEY_FIRST_NAME);
                 String lastName = jsonObject.getString(User.JSON_KEY_LAST_NAME);
-                userInfoList.add(getFormattedUser(firstName,lastName));
+                userInfoList.add(getFormattedUser(firstName, lastName));
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -66,13 +90,14 @@ public class MainActivityPresenter extends MvpPresenter<MainActivityView> {
     }
 
     private User getFormattedUser(String firstName, String lastName) {
-        return new User(formatName(firstName),formatName(lastName));
+        return new User(formatName(firstName), formatName(lastName));
     }
 
     private String formatName(String name) {
         String formattedName = "";
         if (!name.isEmpty()) {
-            formattedName = String.format("%s%s",name.substring(0, 1).toUpperCase(),name.length() > 1 ? name.substring(1):"");
+            name = name.trim();
+            formattedName = String.format("%s%s", name.substring(0, 1).toUpperCase(), name.length() > 1 ? name.substring(1) : "");
         }
         return formattedName;
     }

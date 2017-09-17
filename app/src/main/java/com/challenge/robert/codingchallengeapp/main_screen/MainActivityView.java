@@ -14,4 +14,5 @@ interface MainActivityView extends MvpView {
 
     void onAddUserSuccess(User user);
 
+    void onUserAlreadyAdded();
 }

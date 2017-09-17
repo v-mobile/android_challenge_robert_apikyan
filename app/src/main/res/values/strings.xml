@@ -3,5 +3,6 @@
     <string name="add">add</string>
     <string name="first_name">First name</string>
     <string name="last_name">Last name</string>
+    <string name="user_already_added">User already added.</string>
 
 </resources>
