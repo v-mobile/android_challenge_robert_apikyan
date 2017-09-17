@@ -26,8 +26,7 @@ public class UserInputDialog extends DialogFragment implements View.OnClickListe
     }
 
     private MainActivityCallbacks mainActivityCallbacks;
-    private EditText firstNameET;
-    private EditText lastNameET;
+    private EditText userNameET;
 
     @Override
     public void onAttach(Context context) {
@@ -42,8 +41,7 @@ public class UserInputDialog extends DialogFragment implements View.OnClickListe
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
         View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_user_input, null);
 
-        firstNameET = (EditText) dialogView.findViewById(R.id.dialog_user_first_name_et);
-        lastNameET = (EditText) dialogView.findViewById(R.id.dialog_user_second_name_et);
+        userNameET = (EditText) dialogView.findViewById(R.id.dialog_user_name_et);
 
         dialogView.findViewById(R.id.dialog_user_add_btn).setOnClickListener(this);
 
@@ -53,6 +51,6 @@ public class UserInputDialog extends DialogFragment implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-        mainActivityCallbacks.onUserAdded(firstNameET.getText().toString(), lastNameET.getText().toString());
+        mainActivityCallbacks.onUserAdded(userNameET.getText().toString());
     }
 }

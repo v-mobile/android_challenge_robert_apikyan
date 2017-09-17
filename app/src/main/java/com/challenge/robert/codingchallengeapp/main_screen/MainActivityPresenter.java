@@ -36,9 +36,22 @@ public class MainActivityPresenter extends MvpPresenter<MainActivityView> {
         });
     }
 
-    void addUser(String firstName, String lastName) {
-        // check for empty name
-        if (firstName.isEmpty() || lastName.isEmpty()) {
+    void addUser(String userName) {
+        String firstName = "";
+        String lastName = "";
+
+        if (!userName.isEmpty() && userName.contains(",") && userName.length() >= 3) {
+            String[] split = userName.split(",");
+            firstName = split[0];
+            lastName = split[1];
+        } else {
+            // not valid username
+            post(new MvpViewConsumer<MainActivityView>() {
+                @Override
+                public void postToView(MainActivityView mvpView) {
+                    mvpView.onAddUserFailed();
+                }
+            });
             return;
         }
 
@@ -53,8 +66,8 @@ public class MainActivityPresenter extends MvpPresenter<MainActivityView> {
             return;
         }
 
+        // username format is ok
         final User user = getFormattedUser(firstName, lastName);
-
         userInfoList.add(user);
 
         post(new MvpViewConsumer<MainActivityView>() {
@@ -68,7 +81,8 @@ public class MainActivityPresenter extends MvpPresenter<MainActivityView> {
     private boolean contains(String firstName, String lastName) {
         for (User user :
                 userInfoList) {
-            if (user.getFirstName().equalsIgnoreCase(firstName) && user.getLastName().equalsIgnoreCase(lastName)) {
+            if (user.getFirstName().equalsIgnoreCase(firstName.trim())
+                    && user.getLastName().equalsIgnoreCase(lastName.trim())) {
                 return true;
             }
         }

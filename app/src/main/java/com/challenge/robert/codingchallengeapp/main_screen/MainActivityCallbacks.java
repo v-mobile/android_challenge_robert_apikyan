@@ -5,5 +5,5 @@ package com.challenge.robert.codingchallengeapp.main_screen;
  */
 
 public interface MainActivityCallbacks {
-    void onUserAdded(String firstName,String lastName);
+    void onUserAdded(String userName);
 }

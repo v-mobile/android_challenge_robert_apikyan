@@ -2,6 +2,7 @@ package com.challenge.robert.codingchallengeapp.main_screen;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,7 +21,6 @@ public class MainActivity extends MvpActivity<MainActivityView, MainActivityPres
         implements MainActivityView, MainActivityCallbacks {
 
     private UsersAdapter usersAdapter;
-    private UserInputDialog userInputDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +55,17 @@ public class MainActivity extends MvpActivity<MainActivityView, MainActivityPres
 
     @Override
     public void onAddUserSuccess(User user) {
-        userInputDialog.dismiss();
+        // close dialog
+        DialogFragment dialogFragment = (DialogFragment) getSupportFragmentManager().findFragmentByTag(UserInputDialog.TAG);
+        if(dialogFragment!=null){
+            dialogFragment.dismiss();
+        }
         usersAdapter.addUserAndNotify(user);
+    }
+
+    @Override
+    public void onAddUserFailed() {
+        Toast.makeText(this,R.string.user_name_is_not_valid,Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -65,14 +74,11 @@ public class MainActivity extends MvpActivity<MainActivityView, MainActivityPres
     }
 
     @Override
-    public void onUserAdded(String fistName,String lastName) {
-        getPresenter().addUser(fistName,lastName);
+    public void onUserAdded(String userName) {
+        getPresenter().addUser(userName);
     }
 
     public void onFabClick(View view) {
-        if (userInputDialog == null) {
-            userInputDialog = UserInputDialog.newInstance();
-        }
-        userInputDialog.show(getSupportFragmentManager(), UserInputDialog.TAG);
+        UserInputDialog.newInstance().show(getSupportFragmentManager(), UserInputDialog.TAG);
     }
 }

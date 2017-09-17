@@ -5,18 +5,9 @@
     android:orientation="vertical">
 
     <EditText
-        android:id="@+id/dialog_user_first_name_et"
+        android:id="@+id/dialog_user_name_et"
         style="@style/NameInputEditText"
-        android:layout_width="match_parent"
-        android:layout_marginTop="32dp"
-        android:hint="@string/first_name"
-        android:imeOptions="actionNext" />
-
-    <EditText
-        android:id="@+id/dialog_user_second_name_et"
-        style="@style/NameInputEditText"
-        android:layout_below="@+id/dialog_user_first_name_et"
-        android:hint="@string/last_name"
+        android:hint="@string/user_name"
         android:imeOptions="actionDone" />
 
     <Button
@@ -25,7 +16,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_below="@id/dialog_user_second_name_et"
+        android:layout_below="@id/dialog_user_name_et"
         android:text="@string/add" />
 
 </RelativeLayout>
