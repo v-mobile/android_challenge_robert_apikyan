@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">CodingChallengeApp</string>
+    <string name="add">add</string>
+    <string name="first_name">First name</string>
+    <string name="last_name">Last name</string>
+
+</resources>
