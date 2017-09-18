@@ -37,14 +37,10 @@ public class MainActivityPresenter extends MvpPresenter<MainActivityView> {
     }
 
     void addUser(String userName) {
-        String firstName = "";
-        String lastName = "";
 
-        if (!userName.isEmpty() && userName.contains(",") && userName.length() >= 3) {
-            String[] split = userName.split(",");
-            firstName = split[0];
-            lastName = split[1];
-        } else {
+        String[] split = userName.replaceAll(" ", "").split(",");
+
+        if (userName.isEmpty() || !userName.contains(",") || split.length < 2 || split[0].isEmpty()) {
             // not valid username
             post(new MvpViewConsumer<MainActivityView>() {
                 @Override
@@ -56,7 +52,7 @@ public class MainActivityPresenter extends MvpPresenter<MainActivityView> {
         }
 
         // check for unique name
-        if (contains(firstName, lastName)) {
+        if (contains(split[0], split[1])) {
             post(new MvpViewConsumer<MainActivityView>() {
                 @Override
                 public void postToView(MainActivityView mvpView) {
@@ -67,7 +63,7 @@ public class MainActivityPresenter extends MvpPresenter<MainActivityView> {
         }
 
         // username format is ok
-        final User user = getFormattedUser(firstName, lastName);
+        final User user = getFormattedUser(split[0], split[1]);
         userInfoList.add(user);
 
         post(new MvpViewConsumer<MainActivityView>() {

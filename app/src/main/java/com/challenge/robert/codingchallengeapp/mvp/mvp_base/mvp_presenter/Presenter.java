@@ -1,7 +1,7 @@
 package com.challenge.robert.codingchallengeapp.mvp.mvp_base.mvp_presenter;
 
-import com.challenge.robert.codingchallengeapp.mvp.mvp_base.mvp_view.MvpView;
 import com.challenge.robert.codingchallengeapp.mvp.mvp_base.mvp_delegate.MvpViewControllerDelegateImpl;
+import com.challenge.robert.codingchallengeapp.mvp.mvp_base.mvp_view.MvpView;
 
 /**
  * Created by Robert on 17.09.2017.
@@ -10,6 +10,7 @@ import com.challenge.robert.codingchallengeapp.mvp.mvp_base.mvp_delegate.MvpView
 public interface Presenter<V extends MvpView> {
     /**
      * Called from {@link MvpViewControllerDelegateImpl}
+     *
      * @param view controller view (Activity / Fragment)
      */
     void onAttach(V view);
