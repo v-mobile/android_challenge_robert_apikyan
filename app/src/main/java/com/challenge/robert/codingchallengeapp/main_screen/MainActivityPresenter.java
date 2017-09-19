@@ -56,6 +56,7 @@ public class MainActivityPresenter extends MvpPresenter<MainActivityView> {
 
     /**
      * Add users to users if username is imputed in correct format
+     *
      * @param userName imputed userName
      */
     void addUser(String userName) {
@@ -98,8 +99,9 @@ public class MainActivityPresenter extends MvpPresenter<MainActivityView> {
 
     /**
      * Checks if user is already imputed or not
+     *
      * @param firstName Inputted first name
-     * @param lastName Inputted second name
+     * @param lastName  Inputted second name
      * @return true if user is already added
      */
     private boolean contains(String firstName, String lastName) {
@@ -116,6 +118,7 @@ public class MainActivityPresenter extends MvpPresenter<MainActivityView> {
     /**
      * Parse the users json and to list
      * NOTE. To use Gson or Jackson library for json parsing is better experience
+     *
      * @param json, users json from assets
      */
     private void parseUsersJson(String json) {

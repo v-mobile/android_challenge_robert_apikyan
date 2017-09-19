@@ -7,7 +7,7 @@
     <EditText
         android:id="@+id/dialog_user_name_et"
         style="@style/NameInputEditText"
-        android:hint="@string/user_name"
+        android:hint="@string/user_name_hing"
         android:imeOptions="actionDone" />
 
     <Button
