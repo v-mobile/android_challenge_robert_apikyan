@@ -1,5 +1,6 @@
 package com.challenge.robert.codingchallengeapp.main_screen;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -57,7 +58,7 @@ public class MainActivity extends MvpActivity<MainActivityView, MainActivityPres
     public void onAddUserSuccess(User user) {
         // close dialog
         DialogFragment dialogFragment = (DialogFragment) getSupportFragmentManager().findFragmentByTag(UserInputDialog.TAG);
-        if(dialogFragment!=null){
+        if (dialogFragment != null) {
             dialogFragment.dismiss();
         }
         usersAdapter.addUserAndNotify(user);
@@ -65,12 +66,12 @@ public class MainActivity extends MvpActivity<MainActivityView, MainActivityPres
 
     @Override
     public void onAddUserFailed() {
-        Toast.makeText(this,R.string.user_name_is_not_valid,Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.user_name_is_not_valid, Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onUserAlreadyAdded() {
-        Toast.makeText(this,R.string.user_already_added,Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.user_already_added, Toast.LENGTH_LONG).show();
     }
 
     @Override

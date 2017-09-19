@@ -4,6 +4,7 @@ import com.challenge.robert.codingchallengeapp.main_screen.pojos.User;
 import com.challenge.robert.codingchallengeapp.mvp.mvp_base.mvp_presenter.MvpPresenter;
 import com.challenge.robert.codingchallengeapp.mvp.mvp_base.mvp_view.MvpViewConsumer;
 import com.challenge.robert.codingchallengeapp.utils.JsonUtils;
+import com.challenge.robert.codingchallengeapp.utils.async_utils.AppHandlerThread;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,25 +18,46 @@ import java.util.List;
  */
 
 public class MainActivityPresenter extends MvpPresenter<MainActivityView> {
+    private static final String TAG = "MainActivityPresenterl";
     private List<User> userInfoList;
+    private AppHandlerThread appHandlerThread;
 
     MainActivityPresenter() {
         userInfoList = new ArrayList<>();
     }
 
+    /**
+     * Checks if users list is empty, then async parse from json,
+     * otherwise returns the current users list
+     */
     void getUsers() {
         if (userInfoList.isEmpty()) {
-            String usersJson = JsonUtils.read("json_files/users.json");
-            parseUsersJson(usersJson);
-        }
-        post(new MvpViewConsumer<MainActivityView>() {
-            @Override
-            public void postToView(MainActivityView mvpView) {
-                mvpView.onGetUsersSuccess(userInfoList);
+            if (appHandlerThread == null) {
+                appHandlerThread = new AppHandlerThread(TAG);
             }
-        });
+            appHandlerThread.post(new Runnable() {
+                @Override
+                public void run() {
+                    // async users loading from json
+                    String usersJson = JsonUtils.read("json_files/users.json");
+                    parseUsersJson(usersJson);
+                }
+            }, new Runnable() {
+                @Override
+                public void run() {
+                    // notify after users list is ready
+                    postOnGetUserSuccess();
+                }
+            });
+        } else {
+            postOnGetUserSuccess();
+        }
     }
 
+    /**
+     * Add users to users if username is imputed in correct format
+     * @param userName imputed userName
+     */
     void addUser(String userName) {
 
         String[] split = userName.replaceAll(" ", "").split(",");
@@ -74,6 +96,12 @@ public class MainActivityPresenter extends MvpPresenter<MainActivityView> {
         });
     }
 
+    /**
+     * Checks if user is already imputed or not
+     * @param firstName Inputted first name
+     * @param lastName Inputted second name
+     * @return true if user is already added
+     */
     private boolean contains(String firstName, String lastName) {
         for (User user :
                 userInfoList) {
@@ -85,6 +113,11 @@ public class MainActivityPresenter extends MvpPresenter<MainActivityView> {
         return false;
     }
 
+    /**
+     * Parse the users json and to list
+     * NOTE. To use Gson or Jackson library for json parsing is better experience
+     * @param json, users json from assets
+     */
     private void parseUsersJson(String json) {
         try {
             JSONArray jsonArray = new JSONArray(json);
@@ -103,6 +136,9 @@ public class MainActivityPresenter extends MvpPresenter<MainActivityView> {
         return new User(formatName(firstName), formatName(lastName));
     }
 
+    /**
+     * Make the user name start with uppercase
+     */
     private String formatName(String name) {
         String formattedName = "";
         if (!name.isEmpty()) {
@@ -110,5 +146,20 @@ public class MainActivityPresenter extends MvpPresenter<MainActivityView> {
             formattedName = String.format("%s%s", name.substring(0, 1).toUpperCase(), name.length() > 1 ? name.substring(1) : "");
         }
         return formattedName;
+    }
+
+    private void postOnGetUserSuccess() {
+        post(new MvpViewConsumer<MainActivityView>() {
+            @Override
+            public void postToView(MainActivityView mvpView) {
+                mvpView.onGetUsersSuccess(userInfoList);
+            }
+        });
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        appHandlerThread.quit();
     }
 }
